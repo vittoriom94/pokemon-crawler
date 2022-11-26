@@ -1,6 +1,30 @@
 version: "3.9"
    
 services:
+  redis:
+    image: redis
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "6379:6379"
+  celery:
+    build: .
+    command: celery -A app worker --loglevel INFO
+    volumes:
+      - .:/code
+    depends_on:
+      - db
+      - redis
+      - web
+  celery_beat:
+    build: .
+    command: celery -A app beat --loglevel INFO
+    volumes:
+      - .:/code
+    depends_on:
+      - db
+      - redis
+      - web
   db:
     image: postgres
     environment:
