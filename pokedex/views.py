@@ -1,3 +1,9 @@
-from django.shortcuts import render
+import rest_framework.viewsets
 
-# Create your views here.
+from pokedex.models import Pokemon
+from pokedex.serializers import PokemonSerializer
+
+
+class PokemonViewset(rest_framework.viewsets.ReadOnlyModelViewSet):
+    queryset = Pokemon.objects.all()
+    serializer_class = PokemonSerializer
